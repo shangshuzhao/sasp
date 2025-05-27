@@ -20,7 +20,7 @@ def set_seed(seed):
     torch.cuda.manual_seed(seed)              # PyTorch GPU
     torch.cuda.manual_seed_all(seed)          # if multi-GPU
 
-def main(seed, alpha):
+def main(seed, alpha, device):
     
     set_seed(seed)
 
