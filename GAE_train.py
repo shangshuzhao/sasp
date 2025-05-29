@@ -81,7 +81,6 @@ def main(seed, alpha, device):
         MSE = nn.functional.mse_loss(recon_x, x, reduction='sum')
         GUD = nn.functional.mse_loss(latent, tl, reduction='sum')
         return alpha * MSE + (1-alpha) * GUD
-    alpha = 0.2
 
     # --- TRAIN LOOP ---
 
@@ -122,7 +121,7 @@ def main(seed, alpha, device):
 
     # --- SAVE TRAINED MODEL ---
 
-    model_filename = f"gae_s{seed}_a{alpha * 10}.pth"
+    model_filename = f"gae_s{seed}_a{alpha}.pth"
     torch.save(autoencoder.state_dict(), model_filename)
 
     # --- PLOT LOSS ---
@@ -139,7 +138,7 @@ def main(seed, alpha, device):
     plt.legend()
     plt.grid(True)
     
-    plt.savefig(f"loss_s{seed}_a{alpha * 100}.png")
+    plt.savefig(f"loss_s{seed}_a{alpha}.png")
 
     # --- SAVE SASP INDEX ---
 
@@ -157,7 +156,7 @@ def main(seed, alpha, device):
     ukb_eid = ukb_sasp.iloc[:,0]
     df_combined = pd.concat([ukb_eid, df], axis=1)
 
-    output_filename = f"index_s{seed}_a{alpha * 100}.csv"
+    output_filename = f"index_s{seed}_a{alpha}.csv"
     df_combined.to_csv(output_filename, index=False)
 
 # --- CONFIGURATION ---
