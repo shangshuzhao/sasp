@@ -31,11 +31,11 @@ def main(seed, alpha, device):
     ukb_sample = ukb_sasp.iloc[:,7:46]
     ukb_target = ukb_sasp.iloc[:,[5, 45]]
 
-    # Standardize telomere length data
-    ukb_target = ukb_target.assign(
-        tl_std  = (ukb_target.iloc[:,0] - ukb_target.iloc[:,0].mean()) / ukb_target.iloc[:,0].std()
-    )
-    ukb_target = ukb_target.iloc[:,[1,2]]
+    # # Standardize telomere length data
+    # ukb_target = ukb_target.assign(
+    #     tl_std  = (ukb_target.iloc[:,0] - ukb_target.iloc[:,0].mean()) / ukb_target.iloc[:,0].std()
+    # )
+    # ukb_target = ukb_target.iloc[:,[1,2]]
 
     # split sample data by labels
     ukb_sample_train = ukb_sample[ukb_sample['label'] == 0].drop(columns=['label'])
@@ -75,7 +75,11 @@ def main(seed, alpha, device):
 
     autoencoder = GAE().to(device)
 
-    optimizer = optim.Adam(autoencoder.parameters(), lr=1e-3)
+    optimizer = optim.Adam(
+        autoencoder.parameters(),
+        lr=1e-3,
+        weight_decay=1e-5    # ← L2 penalty on all weights
+    )
 
     def criterion(recon_x, x, latent, tl, alpha=0.5):
         MSE = nn.functional.mse_loss(recon_x, x, reduction='sum')
@@ -87,7 +91,7 @@ def main(seed, alpha, device):
     train_losses = []
     test_losses = []
 
-    num_epochs = 300
+    num_epochs = 500
 
     for _ in range(num_epochs):
 
@@ -171,14 +175,9 @@ if __name__ == "__main__":
         required=True
     )
 
-    parser.add_argument(
-        '--alpha',
-        type=float,
-        required=True
-    )
-
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    main(seed = args.seed, alpha = args.alpha, device = device)
+    
+    for alpha in [i / 10 for i in range(2, 10)]:
+        main(seed = args.seed, alpha = alpha, device = device)

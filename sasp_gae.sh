@@ -17,7 +17,6 @@
 #SBATCH --mem=20G
 
 SEED=$1      # First argument passed to the script
-ALPHA=$2     # Second argument passed to the script
 
 echo "Starting job on $(hostname)"
 echo "Current working directory: $(pwd)"
@@ -28,6 +27,6 @@ module purge
 source /gpfs/homefs1/shz19039/miniconda3/etc/profile.d/conda.sh
 conda activate climate
 
-python GAE_train.py --seed "$SEED" --alpha "$ALPHA"
+python GAE_train.py --seed "$SEED"
 
 conda deactivate
