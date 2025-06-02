@@ -73,12 +73,12 @@ def main(seed, alpha, device):
 
     # --- NETWORK INSTANTIATE ---
 
-    autoencoder = GAE().to(device)
+    autoencoder = GAE(input_dim=38, latent_dim=6, code_dim=1).to(device)
 
     optimizer = optim.Adam(
         autoencoder.parameters(),
         lr=1e-3,
-        weight_decay=1e-5    # ← L2 penalty on all weights
+        weight_decay=1e-5
     )
 
     def criterion(recon_x, x, latent, tl, alpha=0.5):
@@ -152,7 +152,7 @@ def main(seed, alpha, device):
 
     autoencoder.eval()
     with torch.no_grad():
-        ae_sasp_index = autoencoder.encode(ukb_sample_all)
+        ae_sasp_index = autoencoder.predict(ukb_sample_all)
 
     sasp_index = ae_sasp_index.cpu().numpy()
     df = pd.DataFrame(sasp_index, columns=['sasp_index'])
@@ -179,5 +179,5 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    for alpha in [i / 10 for i in range(9, 10)]:
+    for alpha in [i / 10 for i in range(2, 10)]:
         main(seed = args.seed, alpha = alpha, device = device)

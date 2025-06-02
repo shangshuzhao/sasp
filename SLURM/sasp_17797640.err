@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/GAE_train.py", line 14, in <module>
+    from GAE_model import GAE
+  File "/home/shz19039/sasp/GAE_model.py", line 64
+    x = self.encoder(x)
+TabError: inconsistent use of tabs and spaces in indentation

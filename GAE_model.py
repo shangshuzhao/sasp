@@ -27,8 +27,7 @@ class Encoder(nn.Module):
             ResBlock(input_dim, 64, dropout_p), nn.ReLU(),
             nn.Linear(input_dim, 16), nn.ReLU(),
             nn.Dropout(dropout_p),
-            nn.Linear(16, 4), nn.ReLU(),
-            nn.Linear(4, latent_dim)
+            nn.Linear(16, latent_dim)
         )
 
     def forward(self, x):
@@ -38,8 +37,7 @@ class Decoder(nn.Module):
     def __init__(self, latent_dim=1, output_dim=38, dropout_p=0.2):
         super(Decoder, self).__init__()
         self.decoder = nn.Sequential(
-            nn.Linear(latent_dim, 4), nn.ReLU(),
-            nn.Linear(4, 16), nn.ReLU(),
+            nn.Linear(latent_dim, 16), nn.ReLU(),
             nn.Dropout(dropout_p),
             nn.Linear(16, output_dim), nn.ReLU(),
             ResBlock(output_dim, 64, dropout_p), nn.ReLU(),
@@ -50,15 +48,18 @@ class Decoder(nn.Module):
         return self.decoder(z)
 
 class GAE(nn.Module):
-    def __init__(self, input_dim=38, latent_dim=1):
+    def __init__(self, input_dim, latent_dim, code_dim):
         super(GAE, self).__init__()
         self.encoder = Encoder(input_dim, latent_dim)
         self.decoder = Decoder(latent_dim, input_dim)
+        self.regressor = nn.Linear(latent_dim, code_dim)
 
     def forward(self, x):
         bn = self.encoder(x)
-        y = self.decoder(bn)
-        return bn, y
+        recon = self.decoder(bn)
+        z = self.regressor(bn)
+        return z, recon
 
-    def encode(self, x):
-        return self.encoder(x)
+    def predict(self, x):
+        x = self.encoder(x)
+        return self.regressor(x)
