@@ -21,7 +21,6 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)          # if multi-GPU
 
 def main(seed, alpha, device):
-    
     set_seed(seed)
 
     # --- IMPORT DATA ---
@@ -141,7 +140,6 @@ def main(seed, alpha, device):
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
-    
     plt.savefig(f"loss_s{seed}_a{alpha}.png")
 
     # --- SAVE SASP INDEX ---
@@ -166,16 +164,17 @@ def main(seed, alpha, device):
 # --- CONFIGURATION ---
 
 if __name__ == "__main__":
-    
-    parser = argparse.ArgumentParser()
+    # parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        '--seed',
-        type=int,
-        required=True
-    )
+    # parser.add_argument(
+    #     '--seed',
+    #     type=int,
+    #     required=True
+    # )
 
-    args = parser.parse_args()
+    # args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    main(seed = args.seed, alpha = 0.99, device = device)
+    for seed in [42, 52, 62]:
+        for alpha in [i / 10 for i in range(1, 10)]:
+            main(seed = seed, alpha = alpha, device = device)

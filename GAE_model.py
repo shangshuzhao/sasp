@@ -13,7 +13,6 @@ class ResBlock(nn.Module):
 
         out = self.fc1(x)
         out = self.activate(out)
-        out = self.dropout(out)       # ← randomly zero some activations
         out = self.fc2(out)
 
         out += identity
@@ -23,10 +22,9 @@ class Encoder(nn.Module):
     def __init__(self, input_dim=38, latent_dim=1, dropout_p=0.2):
         super().__init__()
         self.encoder = nn.Sequential(
-            ResBlock(input_dim, 128, dropout_p), nn.ReLU(),
             ResBlock(input_dim, 64, dropout_p), nn.ReLU(),
-            nn.Linear(input_dim, 16), nn.ReLU(),
-            nn.Dropout(dropout_p),
+            nn.Linear(input_dim, 32), nn.ReLU(),
+            nn.Linear(32, 16), nn.ReLU(),
             nn.Linear(16, latent_dim)
         )
 
@@ -38,10 +36,9 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.decoder = nn.Sequential(
             nn.Linear(latent_dim, 16), nn.ReLU(),
-            nn.Dropout(dropout_p),
-            nn.Linear(16, output_dim), nn.ReLU(),
-            ResBlock(output_dim, 64, dropout_p), nn.ReLU(),
-            ResBlock(output_dim, 128, dropout_p)
+            nn.Linear(16, 32), nn.ReLU(),
+            nn.Linear(32, output_dim), nn.ReLU(),
+            ResBlock(output_dim, 64, dropout_p)
         )
 
     def forward(self, z):
