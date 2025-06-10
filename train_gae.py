@@ -124,7 +124,7 @@ def main(seed, alpha, device):
 
     # --- SAVE TRAINED MODEL ---
 
-    model_filename = f"gae_s{seed}_a{alpha}.pth"
+    model_filename = f"gae_a{alpha}_s{seed}.pth"
     torch.save(autoencoder.state_dict(), model_filename)
 
     # --- PLOT LOSS ---
@@ -140,7 +140,7 @@ def main(seed, alpha, device):
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f"loss_s{seed}_a{alpha}.png")
+    plt.savefig(f"loss_a{alpha}_s{seed}.png")
 
     # --- SAVE SASP INDEX ---
 
@@ -158,7 +158,7 @@ def main(seed, alpha, device):
     ukb_eid = ukb_sasp.iloc[:,0]
     df_combined = pd.concat([ukb_eid, df], axis=1)
 
-    output_filename = f"index_s{seed}_a{alpha}.csv"
+    output_filename = f"index_a{alpha}_s{seed}.csv"
     df_combined.to_csv(output_filename, index=False)
 
 # --- CONFIGURATION ---
@@ -176,6 +176,6 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    for seed in range(0,10):
-        for alpha in [i / 100 for i in range(1, 10)]:
+    for seed in range(0,5):
+        for alpha in [i / 1000 for i in range(1, 10)]:
             main(seed = seed, alpha = alpha, device = device)
