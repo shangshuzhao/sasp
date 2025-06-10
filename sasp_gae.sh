@@ -4,7 +4,7 @@
 #SBATCH --job-name=sasp
 #SBATCH --output=SLURM/sasp_%j.out       # Standard output file (%j will be replaced by jobid)
 #SBATCH --error=SLURM/sasp_%j.err        # Standard error file
-#SBATCH --time=04:00:00
+#SBATCH --time=08:00:00
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=shangshu.zhao@uconn.edu
 
@@ -24,6 +24,6 @@ module purge
 source /gpfs/homefs1/shz19039/miniconda3/etc/profile.d/conda.sh
 conda activate climate
 
-python GAE_train.py
+python train_gae.py
 
 conda deactivate

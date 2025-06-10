@@ -11,7 +11,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 
-from GAE_model import GAE
+from model_gae import GAE
 
 def set_seed(seed):
     random.seed(seed)                         # Python random
@@ -90,7 +90,7 @@ def main(seed, alpha, device):
     train_losses = []
     test_losses = []
 
-    num_epochs = 2000
+    num_epochs = 500
 
     for _ in range(num_epochs):
 
@@ -176,5 +176,6 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    for alpha in [i / 20 for i in range(1, 5)]:
-        main(seed = 42, alpha = alpha, device = device)
+    for seed in range(0,10):
+        for alpha in [i / 100 for i in range(1, 10)]:
+            main(seed = seed, alpha = alpha, device = device)
