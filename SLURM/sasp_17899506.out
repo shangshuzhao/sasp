@@ -1,0 +1,5 @@
+Starting job on gpu17.storrs.hpc.uconn.edu
+Current working directory: /home/shz19039/sasp
+SLURM Job ID: 17899506
+environment: line 51: unalias: tunnel: not found
+environment: line 52: unalias: code: not found
