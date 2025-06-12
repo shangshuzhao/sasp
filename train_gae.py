@@ -175,5 +175,5 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     for seed in range(0,5):
-        for alpha in [i / 100 for i in range(1, 10)]:
+        for alpha in [i / 10 for i in range(1, 10)]:
             main(seed = seed, alpha = alpha, device = device)
