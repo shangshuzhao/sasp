@@ -95,7 +95,7 @@ def main(seed, alpha, device):
     train_losses = []
     test_losses = []
 
-    num_epochs = 500
+    num_epochs = 5000
 
     for _ in range(num_epochs):
 
@@ -175,5 +175,5 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     for seed in range(0,5):
-        for alpha in [i / 10 for i in range(1, 10)]:
+        for alpha in [i / 50 for i in range(1, 10)]:
             main(seed = seed, alpha = alpha, device = device)
