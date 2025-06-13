@@ -24,8 +24,8 @@ class Encoder(nn.Module):
         self.encoder = nn.Sequential(
             ResBlock(input_dim, 64, dropout_p), nn.ReLU(),
             nn.Linear(input_dim, 32), nn.ReLU(),
-            nn.Linear(32, 16), nn.ReLU(),
-            nn.Linear(16, latent_dim)
+            nn.Linear(32, 20), nn.ReLU(),
+            nn.Linear(20, latent_dim)
         )
 
     def forward(self, x):
@@ -35,8 +35,8 @@ class Decoder(nn.Module):
     def __init__(self, latent_dim=1, output_dim=38, dropout_p=0.2):
         super(Decoder, self).__init__()
         self.decoder = nn.Sequential(
-            nn.Linear(latent_dim, 16), nn.ReLU(),
-            nn.Linear(16, 32), nn.ReLU(),
+            nn.Linear(latent_dim, 20), nn.ReLU(),
+            nn.Linear(20, 32), nn.ReLU(),
             nn.Linear(32, output_dim), nn.ReLU(),
             ResBlock(output_dim, 64, dropout_p)
         )

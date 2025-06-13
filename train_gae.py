@@ -20,26 +20,6 @@ def set_seed(seed):
     torch.cuda.manual_seed(seed)              # PyTorch GPU
     torch.cuda.manual_seed_all(seed)          # if multi-GPU
 
-def cox_ph_loss(risk_scores, times, events):
-    """
-    risk_scores: Tensor of shape (N,), output of the model
-    times: Tensor of shape (N,), time to event or censoring
-    events: Tensor of shape (N,), 1 if event occurred, 0 if censored
-    """
-    # Sort by time descending
-    order = torch.argsort(times, descending=True)
-    risk_scores = risk_scores[order]
-    events = events[order]
-
-    # Compute log cumulative sum of exponentials of risk scores
-    log_cumsum = torch.logcumsumexp(risk_scores, dim=0)
-
-    # Loss is only for individuals with event == 1
-    loss = -torch.sum((risk_scores - log_cumsum) * events)
-
-    return loss / events.sum()  # normalize by number of events
-
-
 def main(seed, alpha, device):
     set_seed(seed)
 
@@ -48,7 +28,7 @@ def main(seed, alpha, device):
     ukb_sasp = pd.read_csv("ukb/ukb_sasp_2.csv")
 
     ukb_sample = ukb_sasp.iloc[:,7:46]
-    ukb_target = ukb_sasp.iloc[:,[3,4, 45]]
+    ukb_target = ukb_sasp.iloc[:,[5, 45]]
 
     # split sample data by labels
     ukb_sample_train = ukb_sample[ukb_sample['label'] == 0].drop(columns=['label'])
@@ -68,16 +48,20 @@ def main(seed, alpha, device):
     ukb_target_val = ukb_target_val.values.astype(np.float32)
     ukb_target_test = ukb_target_test.values.astype(np.float32)
 
-    # Convert to Tensor
-    ukb_sample_train = torch.tensor(ukb_sample_train).to(device)
-    ukb_target_train = torch.tensor(ukb_target_train).to(device)
+    # Pack to Tensor
+    ukb_train = TensorDataset(torch.tensor(ukb_sample_train).to(device),
+                            torch.tensor(ukb_target_train).to(device))
 
-    ukb_sample_val = torch.tensor(ukb_sample_val).to(device)
-    ukb_target_val = torch.tensor(ukb_target_val).to(device)
+    ukb_val = TensorDataset(torch.tensor(ukb_sample_val).to(device),
+                            torch.tensor(ukb_target_val).to(device))
 
-    # --- MODEL INSTANTIATE ---
+    # Load the data to dataloader
+    ukb_train_loader = DataLoader(ukb_train, batch_size=128, shuffle=True)
+    ukb_val_loader = DataLoader(ukb_val, batch_size=128, shuffle=False)
 
-    autoencoder = GAE(input_dim=38, latent_dim=6, code_dim=1).to(device)
+    # --- NETWORK INSTANTIATE ---
+
+    autoencoder = GAE(input_dim=38, latent_dim=16, code_dim=1).to(device)
 
     optimizer = optim.Adam(
         autoencoder.parameters(),
@@ -85,9 +69,9 @@ def main(seed, alpha, device):
         weight_decay=1e-5
     )
 
-    def criterion(recon_x, x, risk_scores, times, events, alpha=0.005):
+    def criterion(recon_x, x, latent, tl, alpha=0.5):
         MSE = nn.functional.mse_loss(recon_x, x, reduction='sum')
-        GUD = cox_ph_loss(risk_scores, times, events)
+        GUD = nn.functional.mse_loss(latent, tl, reduction='sum')
         return alpha * MSE + (1-alpha) * GUD
 
     # --- TRAIN LOOP ---
@@ -95,35 +79,41 @@ def main(seed, alpha, device):
     train_losses = []
     test_losses = []
 
-    num_epochs = 5000
+    num_epochs = 500
 
     for _ in range(num_epochs):
 
         autoencoder.train()
-        scores, recon_x  = autoencoder(ukb_sample_train)
+        running_loss = 0.0
 
-        loss = criterion(recon_x, ukb_sample_train, scores, ukb_target_train[:,1], ukb_target_train[:,0], alpha=alpha)
-        loss.backward()
+        for samples, targets in ukb_train_loader:
+            latents, recon_x  = autoencoder(samples)
 
-        optimizer.step()
-        optimizer.zero_grad()
+            loss = criterion(recon_x, samples, latents, targets, alpha=alpha)
+            loss.backward()
+            running_loss += loss.item()
 
-        train_losses.append(loss.item())
+            optimizer.step()
+            optimizer.zero_grad()
 
-        # --- VALIDATION ---
+        avg_train_loss = running_loss / len(ukb_train_loader)
+        train_losses.append(avg_train_loss)
 
         autoencoder.eval()
+        running_loss = 0.0
 
         with torch.no_grad():
+            for samples, targets in ukb_val_loader:
+                latents, recon_x = autoencoder(samples)
 
-            scores, recon_x = autoencoder(ukb_sample_train)
+                running_loss += criterion(recon_x, samples, latents, targets, alpha=alpha).item()
 
-            loss = criterion(recon_x, ukb_sample_train, scores, ukb_target_train[:,1], ukb_target_train[:,0], alpha=alpha)
-            test_losses.append(loss.item())
+        avg_test_loss = running_loss / len(ukb_val_loader)
+        test_losses.append(avg_test_loss)
 
     # --- SAVE TRAINED MODEL ---
 
-    model_filename = f"model_weights/gae_a{alpha}_s{seed}.pth"
+    model_filename = f"nn_a{alpha}_s{seed}.pth"
     torch.save(autoencoder.state_dict(), model_filename)
 
     # --- PLOT LOSS ---
@@ -139,7 +129,7 @@ def main(seed, alpha, device):
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f"loss_plots/loss_a{alpha}_s{seed}.png")
+    plt.savefig(f"loss_a{alpha}_s{seed}.png")
 
     # --- SAVE SASP INDEX ---
 
@@ -149,14 +139,15 @@ def main(seed, alpha, device):
 
     autoencoder.eval()
     with torch.no_grad():
-        sasp_index = autoencoder.predict(ukb_sample_all)
-        sasp_index = sasp_index.cpu().numpy()
-        df = pd.DataFrame(sasp_index, columns=['sasp_index'])
+        ae_sasp_index = autoencoder.predict(ukb_sample_all)
+
+    sasp_index = ae_sasp_index.cpu().numpy()
+    df = pd.DataFrame(sasp_index, columns=['sasp_index'])
 
     ukb_eid = ukb_sasp.iloc[:,0]
     df_combined = pd.concat([ukb_eid, df], axis=1)
 
-    output_filename = f"indexes/index_a{alpha}_s{seed}.csv"
+    output_filename = f"index_a{alpha}_s{seed}.csv"
     df_combined.to_csv(output_filename, index=False)
 
 # --- CONFIGURATION ---
@@ -175,5 +166,5 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     for seed in range(0,5):
-        for alpha in [i / 50 for i in range(1, 10)]:
+        for alpha in [i / 1000 for i in range(1, 10)]:
             main(seed = seed, alpha = alpha, device = device)
