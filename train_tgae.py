@@ -166,7 +166,7 @@ def main(seed, alpha, device):
     train_losses = []
     test_losses = []
 
-    num_epochs = 500
+    num_epochs = 200
 
     for _ in range(num_epochs):
 
