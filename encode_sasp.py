@@ -1,0 +1,79 @@
+import argparse
+import numpy as np
+import pandas as pd
+
+import torch
+
+from TransformerAutoEncoder import TransformerAE
+from protein_to_label import name_to_embed
+
+def generate_index(tgae, protein_data, proteins_label):
+    """
+    Input: model, tensorized protein data
+    Output: encoded index as Pandas DF
+    """
+    tgae.eval()
+    with torch.no_grad():
+        sasp_index = tgae.predict(protein_data, proteins_label)
+
+    sasp_index = sasp_index.cpu().numpy()
+    df = pd.DataFrame(sasp_index, columns=['sasp_index'])
+    return df
+
+def process_data(raw_data, device):
+    """
+    Input: protein raw data as Pandas DF
+    Output: encoded protein names, tensorized protein data
+    """
+    var_names = raw_data.columns.tolist()
+    var_label = name_to_embed(var_names)
+    var_label = torch.tensor(var_label).unsqueeze(0).to(device)
+
+    np_data = raw_data.values.astype(np.float32)
+    tensor_data = torch.tensor(np_data).to(device)
+    return var_label, tensor_data
+
+def main(alpha, seed, device):
+
+    # extended sasp protein from ukb
+    ukb_raw = pd.read_csv("ukb/ukb_sasp_2.csv")
+    ukb_proteins = ukb_raw.iloc[:,7:45]
+    protein_labels, sasp_data = process_data(ukb_proteins, device)
+
+    tgae = TransformerAE().to(device)
+    model_path = f"gae_a{alpha}_s{seed}.pth"
+    tgae.load_state_dict(torch.load(model_path))
+
+    index = generate_index(tgae, sasp_data, protein_labels)
+
+    id = ukb_raw.iloc[:,0]
+    df_combined = pd.concat([id, index], axis=1)
+    output_filename = f"index_extend_a{alpha}_s{seed}.csv"
+    df_combined.to_csv(output_filename, index=False)
+
+    # original sasp protein from ukb
+    ukb_raw = pd.read_csv("ukb/ukb_sasp_2.csv")
+    ukb_proteins = ukb_raw.iloc[:,[7, 8, 9, 10, 12, 14, 17, 18, 21, 26, 28, 29, 31, 32, 33, 34, 38, 42, 43, 44]]
+    protein_labels, sasp_data = process_data(ukb_proteins, device)
+
+    tgae = TransformerAE().to(device)
+    model_path = f"gae_a{alpha}_s{seed}.pth"
+    tgae.load_state_dict(torch.load(model_path))
+
+    index = generate_index(tgae, sasp_data, protein_labels)
+
+    id = ukb_raw.iloc[:,0]
+    df_combined = pd.concat([id, index], axis=1)
+    output_filename = f"index_origin_a{alpha}_s{seed}.csv"
+    df_combined.to_csv(output_filename, index=False)
+
+# --- CONFIGURATION ---
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--seed', type=int, required=True)
+    parser.add_argument('--alpha', type=float, required=True)
+    args = parser.parse_args()
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    main(alpha=args.alpha, seed=args.seed, device=device)

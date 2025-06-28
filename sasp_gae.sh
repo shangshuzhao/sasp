@@ -24,12 +24,13 @@ module purge
 source /gpfs/homefs1/shz19039/miniconda3/etc/profile.d/conda.sh
 conda activate climate
 
-ALPHAS=(0.004 0.005 0.007 0.009 0.015 0.02)
+ALPHAS=(0.005 0.006 0.007 0.008)
 
 # Loop over all combinations
 for alpha in "${ALPHAS[@]}"; do
     echo "Running seed=$1, alpha=$alpha"
     python train_tgae.py --seed $1 --alpha $alpha
+    python encode_sasp.py --seed $1 --alpha $alpha
 done
 
 conda deactivate

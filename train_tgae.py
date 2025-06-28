@@ -11,6 +11,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 
+from protein_to_label import name_to_embed
 from TransformerAutoEncoder import TransformerAE
 
 def set_seed(seed):
@@ -19,50 +20,6 @@ def set_seed(seed):
     torch.manual_seed(seed)                   # PyTorch CPU
     torch.cuda.manual_seed(seed)              # PyTorch GPU
     torch.cuda.manual_seed_all(seed)          # if multi-GPU
-
-def name_to_embed(name_list: list) -> list:
-    name_dict = {
-        'ANG': 0,
-        'CCL13': 1,
-        'CCL2': 2,
-        'CCL20': 3,
-        'CCL3': 4,
-        'CCL4': 5,
-        'CHI3L1': 6,
-        'CSF2': 7,
-        'CXCL1': 8,
-        'CXCL10': 9,
-        'CXCL8': 10,
-        'CXCL9': 11,
-        'FGA': 12,
-        'FGF2': 13,
-        'FSTL3': 14,
-        'GDF15': 15,
-        'HGF': 16,
-        'ICAM1': 17,
-        'IGFBP2': 18,
-        'IGFBP6': 19,
-        'IL1B': 20,
-        'IL4': 21,
-        'IL5': 22,
-        'IL6': 23,
-        'IL6ST': 24,
-        'LEP': 25,
-        'MIF': 26,
-        'MMP12': 27,
-        'PGF': 28,
-        'PLAUR': 29,
-        'SERPINE1': 30,
-        'TF': 31,
-        'TIMP1': 32,
-        'TNFRSF11B': 33,
-        'TNFRSF1A': 34,
-        'TNFRSF1B': 35,
-        'TNFSF10': 36,
-        'VEGFA': 37
-    }
-    name_embed = [name_dict[name] for name in name_list]
-    return name_embed
 
 def prepare_data(ukb_sasp_train, ukb_sasp_val, device):
 
@@ -76,7 +33,7 @@ def prepare_data(ukb_sasp_train, ukb_sasp_val, device):
     # Embed variables names
     var_names = ukb_sample_train.columns.tolist()
     var_label = name_to_embed(var_names)
-    var_label = torch.tensor(var_label).unsqueeze(0).to(device)
+    var_label = torch.tensor(var_label).to(device)
 
     # Convert to NumPy arrays
     ukb_sample_train = ukb_sample_train.values.astype(np.float32)
@@ -153,7 +110,7 @@ def main(seed, alpha, device):
 
     # --- NETWORK INSTANTIATE ---
 
-    tgae = TransformerAE(var_label=proteins_label).to(device)
+    tgae = TransformerAE().to(device)
 
     optimizer = optim.Adam(
         tgae.parameters(),
@@ -166,7 +123,7 @@ def main(seed, alpha, device):
     train_losses = []
     test_losses = []
 
-    num_epochs = 200
+    num_epochs = 250
 
     for _ in range(num_epochs):
 
@@ -174,7 +131,7 @@ def main(seed, alpha, device):
         running_loss = 0.0
 
         for samples, guides in ukb_train_loader:
-            latents, recon_x  = tgae(samples)
+            latents, recon_x = tgae(samples, proteins_label)
 
             loss = criterion(recon_x, samples, latents, guides, alpha=alpha)
             loss.backward()
@@ -190,7 +147,7 @@ def main(seed, alpha, device):
 
         with torch.no_grad():
             for samples, guides in ukb_val_loader:
-                latents, recon_x = tgae(samples)
+                latents, recon_x = tgae(samples, proteins_label)
 
                 running_loss += criterion(recon_x, samples, latents, guides, alpha=alpha).item()
 
@@ -203,11 +160,6 @@ def main(seed, alpha, device):
     # --- PLOT LOSS ---
     plot_losses(train_losses, test_losses, alpha, seed)
 
-    # --- SAVE SASP INDEX ---
-    ukb_sasp_all = pd.read_csv("ukb/ukb_sasp_2.csv")
-    save_sasp_index(tgae, ukb_sasp_all, alpha, seed)
-
-
 # --- CONFIGURATION ---
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -216,4 +168,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
     main(seed=args.seed, alpha=args.alpha, device=device)

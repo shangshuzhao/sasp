@@ -1,9 +1,0 @@
-Starting job on gpu21.storrs.hpc.uconn.edu
-Current working directory: /home/shz19039/sasp
-SLURM Job ID: 18070196
-Running seed=2, alpha=0.004
-Running seed=2, alpha=0.005
-Running seed=2, alpha=0.007
-Running seed=2, alpha=0.009
-Running seed=2, alpha=0.015
-Running seed=2, alpha=0.02

@@ -1,0 +1,324 @@
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/train_tgae.py", line 171, in <module>
+    main(seed=args.seed, alpha=args.alpha, device=device)
+  File "/home/shz19039/sasp/train_tgae.py", line 134, in main
+    latents, recon_x  = tgae(samples)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 83, in forward
+    output = self.decoder(expand)                                     # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 48, in forward
+    output = self.transformer_decoder(tgt=name_emb, memory=memory)  # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 610, in forward
+    output = mod(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1103, in forward
+    + self._mha_block(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1139, in _mha_block
+    x = self.multihead_attn(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 1373, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 6230, in multi_head_attention_forward
+    q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 5632, in _in_projection_packed
+    kv_proj = linear(k, w_kv, b_kv)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (128x38 and 128x256)
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 79, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 45, in main
+    tgae.load_state_dict(torch.load(model_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 1479, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'gae_a0.004_s1.pth'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/train_tgae.py", line 171, in <module>
+    main(seed=args.seed, alpha=args.alpha, device=device)
+  File "/home/shz19039/sasp/train_tgae.py", line 134, in main
+    latents, recon_x  = tgae(samples)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 83, in forward
+    output = self.decoder(expand)                                     # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 48, in forward
+    output = self.transformer_decoder(tgt=name_emb, memory=memory)  # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 610, in forward
+    output = mod(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1103, in forward
+    + self._mha_block(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1139, in _mha_block
+    x = self.multihead_attn(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 1373, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 6230, in multi_head_attention_forward
+    q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 5632, in _in_projection_packed
+    kv_proj = linear(k, w_kv, b_kv)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (128x38 and 128x256)
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 79, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 45, in main
+    tgae.load_state_dict(torch.load(model_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 1479, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'gae_a0.005_s1.pth'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/train_tgae.py", line 171, in <module>
+    main(seed=args.seed, alpha=args.alpha, device=device)
+  File "/home/shz19039/sasp/train_tgae.py", line 134, in main
+    latents, recon_x  = tgae(samples)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 83, in forward
+    output = self.decoder(expand)                                     # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 48, in forward
+    output = self.transformer_decoder(tgt=name_emb, memory=memory)  # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 610, in forward
+    output = mod(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1103, in forward
+    + self._mha_block(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1139, in _mha_block
+    x = self.multihead_attn(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 1373, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 6230, in multi_head_attention_forward
+    q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 5632, in _in_projection_packed
+    kv_proj = linear(k, w_kv, b_kv)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (128x38 and 128x256)
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 79, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 45, in main
+    tgae.load_state_dict(torch.load(model_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 1479, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'gae_a0.007_s1.pth'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/train_tgae.py", line 171, in <module>
+    main(seed=args.seed, alpha=args.alpha, device=device)
+  File "/home/shz19039/sasp/train_tgae.py", line 134, in main
+    latents, recon_x  = tgae(samples)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 83, in forward
+    output = self.decoder(expand)                                     # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 48, in forward
+    output = self.transformer_decoder(tgt=name_emb, memory=memory)  # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 610, in forward
+    output = mod(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1103, in forward
+    + self._mha_block(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1139, in _mha_block
+    x = self.multihead_attn(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 1373, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 6230, in multi_head_attention_forward
+    q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 5632, in _in_projection_packed
+    kv_proj = linear(k, w_kv, b_kv)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (128x38 and 128x256)
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 79, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 45, in main
+    tgae.load_state_dict(torch.load(model_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 1479, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'gae_a0.009_s1.pth'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/train_tgae.py", line 171, in <module>
+    main(seed=args.seed, alpha=args.alpha, device=device)
+  File "/home/shz19039/sasp/train_tgae.py", line 134, in main
+    latents, recon_x  = tgae(samples)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 83, in forward
+    output = self.decoder(expand)                                     # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 48, in forward
+    output = self.transformer_decoder(tgt=name_emb, memory=memory)  # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 610, in forward
+    output = mod(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1103, in forward
+    + self._mha_block(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1139, in _mha_block
+    x = self.multihead_attn(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 1373, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 6230, in multi_head_attention_forward
+    q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 5632, in _in_projection_packed
+    kv_proj = linear(k, w_kv, b_kv)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (128x38 and 128x256)
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 79, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 45, in main
+    tgae.load_state_dict(torch.load(model_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 1479, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'gae_a0.015_s1.pth'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/train_tgae.py", line 171, in <module>
+    main(seed=args.seed, alpha=args.alpha, device=device)
+  File "/home/shz19039/sasp/train_tgae.py", line 134, in main
+    latents, recon_x  = tgae(samples)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 83, in forward
+    output = self.decoder(expand)                                     # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/sasp/TransformerAutoEncoder.py", line 48, in forward
+    output = self.transformer_decoder(tgt=name_emb, memory=memory)  # (B, P, d_model)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 610, in forward
+    output = mod(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1103, in forward
+    + self._mha_block(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 1139, in _mha_block
+    x = self.multihead_attn(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 1373, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 6230, in multi_head_attention_forward
+    q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/functional.py", line 5632, in _in_projection_packed
+    kv_proj = linear(k, w_kv, b_kv)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (128x38 and 128x256)
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 79, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 45, in main
+    tgae.load_state_dict(torch.load(model_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 1479, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'gae_a0.02_s1.pth'
