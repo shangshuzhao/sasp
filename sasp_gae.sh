@@ -29,7 +29,7 @@ ALPHAS=(0.005 0.006 0.007 0.008)
 # Loop over all combinations
 for alpha in "${ALPHAS[@]}"; do
     echo "Running seed=$1, alpha=$alpha"
-    python train_tgae.py --seed $1 --alpha $alpha
+#    python train_tgae.py --seed $1 --alpha $alpha
     python encode_sasp.py --seed $1 --alpha $alpha
 done
 

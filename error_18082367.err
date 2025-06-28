@@ -1,0 +1,64 @@
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 96, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 72, in main
+    medex_raw = pd.read_csv("medex/medex_renamed.csv")
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/common.py", line 873, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: 'medex/medex_renamed.csv'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 96, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 72, in main
+    medex_raw = pd.read_csv("medex/medex_renamed.csv")
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/common.py", line 873, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: 'medex/medex_renamed.csv'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 96, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 72, in main
+    medex_raw = pd.read_csv("medex/medex_renamed.csv")
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/common.py", line 873, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: 'medex/medex_renamed.csv'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp.py", line 96, in <module>
+    main(alpha=args.alpha, seed=args.seed, device=device)
+  File "/home/shz19039/sasp/encode_sasp.py", line 72, in main
+    medex_raw = pd.read_csv("medex/medex_renamed.csv")
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/pandas/io/common.py", line 873, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: 'medex/medex_renamed.csv'
