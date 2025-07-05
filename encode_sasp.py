@@ -60,71 +60,54 @@ def gen_index(raw_df, tgae, device):
         output = gen_single_index(row, tgae, device)
         sasp_index_list.append(output)
 
-    index = pd.DataFrame({'sasp_index': sasp_index_list})
-    return index
+    return sasp_index_list
 
 def main(alpha, seed):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Load TGAE model
+    # Load TGAE model and data
     tgae = TransformerAE().to(device)
     model_path = f"gae_a{alpha}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 
-    # extended sasp protein from ukb
-    ukb_raw = pd.read_csv("ukb/ukb_sasp_2.csv")
-    ukb_proteins = ukb_raw.iloc[:,7:45]
-    index = gen_index(ukb_proteins, tgae, device)
-
-    id = ukb_raw.iloc[:,0]
-    df_combined = pd.concat([id, index], axis=1)
-    df_combined.to_csv(f"sasp_ukb_e_a{alpha}_s{seed}.csv", index=False)
+    medex_imputed = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")
+    medex_missing = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_missing.csv")
 
     # extended sasp index using medex imputed
-    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")
-    medex_proteins = medex_raw.iloc[:,4:]
+    medex_proteins = medex_imputed.iloc[:,4:]
     medex_proteins = rename_medex_columns(medex_proteins)
     medex_proteins = match_ukb_dist(medex_proteins)
-    index = gen_index(medex_proteins, tgae, device)
-
-    id = ukb_raw.iloc[:,0:4]
-    df_combined = pd.concat([id, index], axis=1)
-    index.to_csv(f"sasp_medex_e_impute_a{alpha}_s{seed}.csv", index=False)
+    index_1 = gen_index(medex_proteins, tgae, device)
 
     # original sasp index using medex imputed
-    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")
     indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
-    medex_proteins = medex_raw.iloc[:,[i + 4 for i in indexes]]
+    medex_proteins = medex_imputed.iloc[:,[i + 4 for i in indexes]]
     medex_proteins = rename_medex_columns(medex_proteins)
     medex_proteins = match_ukb_dist(medex_proteins)
-    index = gen_index(medex_proteins, tgae, device)
-
-    id = ukb_raw.iloc[:,0:4]
-    df_combined = pd.concat([id, index], axis=1)
-    index.to_csv(f"sasp_medex_o_impute_a{alpha}_s{seed}.csv", index=False)
+    index_2 = gen_index(medex_proteins, tgae, device)
 
     # extended sasp index using medex raw
-    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_missing.csv")
-    medex_proteins = medex_raw.iloc[:,4:42]
+    medex_proteins = medex_missing.iloc[:,4:42]
     medex_proteins = rename_medex_columns(medex_proteins)
     medex_proteins = match_ukb_dist(medex_proteins)
-    index = gen_index(medex_proteins, tgae, device)
-
-    id = ukb_raw.iloc[:,0:4]
-    df_combined = pd.concat([id, index], axis=1)
-    index.to_csv(f"sasp_medex_e_raw_a{alpha}_s{seed}.csv", index=False)
+    index_3 = gen_index(medex_proteins, tgae, device)
 
     # original sasp index using medex raw
-    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_missing.csv")
     indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
-    medex_proteins = medex_raw.iloc[:,[i + 4 for i in indexes]]
+    medex_proteins = medex_missing.iloc[:,[i + 4 for i in indexes]]
     medex_proteins = rename_medex_columns(medex_proteins)
     medex_proteins = match_ukb_dist(medex_proteins)
-    index = gen_index(medex_proteins, tgae, device)
+    index_4 = gen_index(medex_proteins, tgae, device)
 
-    id = ukb_raw.iloc[:,0:4]
-    df_combined = pd.concat([id, index], axis=1)
-    index.to_csv(f"sasp_medex_o_raw_a{alpha}_s{seed}.csv", index=False)
+    # Combine results
+    id = medex_imputed.iloc[:,0:4]
+    index_1 = pd.DataFrame({'sasp_index_e_imputed': index_1})
+    index_2 = pd.DataFrame({'sasp_index_o_imputed': index_2})
+    index_3 = pd.DataFrame({'sasp_index_e_missing': index_3})
+    index_4 = pd.DataFrame({'sasp_index_o_missing': index_4})
+    df_combined = pd.concat([id, index_1, index_2, index_3, index_4], axis=1)
+    df_combined.to_csv(f"sasp_medex_a{alpha}_s{seed}.csv", index=False)
+
 
 # --- CONFIGURATION ---
 if __name__ == "__main__":
