@@ -24,7 +24,7 @@ module purge
 source /gpfs/homefs1/shz19039/miniconda3/etc/profile.d/conda.sh
 conda activate climate
 
-python encode_sasp.py --seed 3 --alpha 0.007
+python encode_sasp_ukb.py --seed 3 --alpha 0.007
 
 
 conda deactivate
