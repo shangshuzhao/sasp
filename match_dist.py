@@ -82,11 +82,11 @@ def match_ukb_dist(df):
     }
 
     df_transformed = df.copy()
-    
+
     for col in df.columns:
 
         if not col in ukb_means:
-            raise ValueError("Protein not included in the UK Biobank")
+            raise ValueError(f"Protein {col} not included in the UK Biobank")
 
         col_mean = df[col].mean()
         col_std = df[col].std()

@@ -7,34 +7,64 @@ import torch
 from TransformerAutoEncoder import TransformerAE
 from protein_to_label import name_to_embed
 from match_dist import match_ukb_dist
+from rename_medex_protein import rename_medex_columns
 
-def generate_index(tgae, proteins_label, protein_data):
+def gen_single_index(row, tgae, device):
     """
-    Input: model, tensorized protein data
-    Output: encoded index as Pandas DF
+    Input: single row of protein data as Pandas DF
+    Output: single scalar of SASP index
     """
+    # Drop missing proteins
+    valid_proteins = row.dropna()
+
+    # Get protein names and their values
+    protein_names = valid_proteins.index.tolist()
+    protein_values = valid_proteins.values.tolist()
+
+    # Convert protein names to indices
+    protein_indices = name_to_embed(protein_names)
+
+    # Convert to torch tensors
+    protein_idx_tensor = torch.tensor(protein_indices, dtype=torch.long).unsqueeze(0).to(device)   # Shape: (1, P)
+    protein_value_tensor = torch.tensor([protein_values], dtype=torch.float32).to(device) # Shape: (1, P)
+
     tgae.eval()
     with torch.no_grad():
-        sasp_index = tgae.predict(protein_data, proteins_label)
+        sasp_index = tgae.predict(protein_value_tensor, protein_idx_tensor)
 
     sasp_index = sasp_index.cpu().numpy()
-    df = pd.DataFrame(sasp_index, columns=['sasp_index'])
-    return df
 
-def process_data(raw_data, device):
+    return sasp_index.item()
+
+def gen_index(raw_df, tgae, device):
     """
-    Input: protein raw data as Pandas DF
-    Output: encoded protein names, tensorized protein data
+    Input: protein data as Pandas DF, with missing values
+    Output: SASP index as Pandas DF
     """
-    var_names = raw_data.columns.tolist()
-    var_label = name_to_embed(var_names)
-    var_label = torch.tensor(var_label).unsqueeze(0).to(device)
+    # Predefined list of 38 expected proteins
+    ALLOWED_PROTEINS = [
+        'ANG', 'CCL13', 'CCL2', 'CCL20', 'CCL3', 'CCL4', 'CHI3L1', 'CSF2',
+        'CXCL1', 'CXCL10', 'CXCL8', 'CXCL9', 'FGA', 'FGF2', 'FSTL3', 'GDF15',
+        'HGF', 'ICAM1', 'IGFBP2', 'IGFBP6', 'IL1B', 'IL4', 'IL5', 'IL6',
+        'IL6ST', 'LEP', 'MIF', 'MMP12', 'PGF', 'PLAUR', 'SERPINE1', 'TF',
+        'TIMP1', 'TNFRSF11B', 'TNFRSF1A', 'TNFRSF1B', 'TNFSF10', 'VEGFA'
+    ]
 
-    np_data = raw_data.values.astype(np.float32)
-    tensor_data = torch.tensor(np_data).to(device)
-    return var_label, tensor_data
+    invalid_proteins = [col for col in raw_df.columns if col not in ALLOWED_PROTEINS]
 
-def main(alpha, seed, device):
+    if invalid_proteins:
+        raise ValueError(f"The following proteins are not allowed: {invalid_proteins}")
+
+    sasp_index_list = []
+    for _, row in raw_df.iterrows():
+        output = gen_single_index(row, tgae, device)
+        sasp_index_list.append(output)
+
+    index = pd.DataFrame({'sasp_index': sasp_index_list})
+    return index
+
+def main(alpha, seed):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load TGAE model
     tgae = TransformerAE().to(device)
@@ -44,44 +74,57 @@ def main(alpha, seed, device):
     # extended sasp protein from ukb
     ukb_raw = pd.read_csv("ukb/ukb_sasp_2.csv")
     ukb_proteins = ukb_raw.iloc[:,7:45]
-
-    protein_labels, sasp_data = process_data(ukb_proteins, device)
-    index = generate_index(tgae, protein_labels, sasp_data)
+    index = gen_index(ukb_proteins, tgae, device)
 
     id = ukb_raw.iloc[:,0]
     df_combined = pd.concat([id, index], axis=1)
-    df_combined.to_csv(f"index_ukb_e_a{alpha}_s{seed}.csv", index=False)
+    df_combined.to_csv(f"sasp_ukb_e_a{alpha}_s{seed}.csv", index=False)
 
-    # original sasp protein from ukb
-    ukb_raw = pd.read_csv("ukb/ukb_sasp_2.csv")
-    ukb_proteins = ukb_raw.iloc[:,[7, 8, 9, 10, 12, 14, 17, 18, 21, 26, 28, 29, 31, 32, 33, 34, 38, 42, 43, 44]]
-
-    protein_labels, sasp_data = process_data(ukb_proteins, device)
-    index = generate_index(tgae, protein_labels, sasp_data)
-
-    id = ukb_raw.iloc[:,0]
-    df_combined = pd.concat([id, index], axis=1)
-    df_combined.to_csv(f"index_ukb_o_a{alpha}_s{seed}.csv", index=False)
-
-    # extended sasp protein from ukb
-    medex_raw = pd.read_csv("medex/medex_renamed.csv")
+    # extended sasp index using medex imputed
+    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")
     medex_proteins = medex_raw.iloc[:,4:]
+    medex_proteins = rename_medex_columns(medex_proteins)
     medex_proteins = match_ukb_dist(medex_proteins)
+    index = gen_index(medex_proteins, tgae, device)
 
-    protein_labels, sasp_data = process_data(medex_proteins, device)
-    index = generate_index(tgae, protein_labels, sasp_data)
+    id = ukb_raw.iloc[:,0:4]
+    df_combined = pd.concat([id, index], axis=1)
+    index.to_csv(f"sasp_medex_e_impute_a{alpha}_s{seed}.csv", index=False)
 
-    index.to_csv(f"index_medex_e_a{alpha}_s{seed}.csv", index=False)
-
-    # original sasp protein from ukb
-    medex_raw = pd.read_csv("medex/medex_renamed.csv")
-    medex_proteins = medex_raw.iloc[:,[4, 5, 6, 7, 9, 11, 14, 15, 18, 23, 25, 26, 28, 29, 30, 31, 35, 39, 40, 41]]
+    # original sasp index using medex imputed
+    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")
+    indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
+    medex_proteins = medex_raw.iloc[:,[i + 4 for i in indexes]]
+    medex_proteins = rename_medex_columns(medex_proteins)
     medex_proteins = match_ukb_dist(medex_proteins)
+    index = gen_index(medex_proteins, tgae, device)
 
-    protein_labels, sasp_data = process_data(medex_proteins, device)
-    index = generate_index(tgae, protein_labels, sasp_data)
+    id = ukb_raw.iloc[:,0:4]
+    df_combined = pd.concat([id, index], axis=1)
+    index.to_csv(f"sasp_medex_o_impute_a{alpha}_s{seed}.csv", index=False)
 
-    index.to_csv(f"index_medex_o_a{alpha}_s{seed}.csv", index=False)
+    # extended sasp index using medex raw
+    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_missing.csv")
+    medex_proteins = medex_raw.iloc[:,4:42]
+    medex_proteins = rename_medex_columns(medex_proteins)
+    medex_proteins = match_ukb_dist(medex_proteins)
+    index = gen_index(medex_proteins, tgae, device)
+
+    id = ukb_raw.iloc[:,0:4]
+    df_combined = pd.concat([id, index], axis=1)
+    index.to_csv(f"sasp_medex_e_raw_a{alpha}_s{seed}.csv", index=False)
+
+    # original sasp index using medex raw
+    medex_raw = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_missing.csv")
+    indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
+    medex_proteins = medex_raw.iloc[:,[i + 4 for i in indexes]]
+    medex_proteins = rename_medex_columns(medex_proteins)
+    medex_proteins = match_ukb_dist(medex_proteins)
+    index = gen_index(medex_proteins, tgae, device)
+
+    id = ukb_raw.iloc[:,0:4]
+    df_combined = pd.concat([id, index], axis=1)
+    index.to_csv(f"sasp_medex_o_raw_a{alpha}_s{seed}.csv", index=False)
 
 # --- CONFIGURATION ---
 if __name__ == "__main__":
@@ -91,6 +134,4 @@ if __name__ == "__main__":
     parser.add_argument('--alpha', type=float, required=True)
     args = parser.parse_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    main(alpha=args.alpha, seed=args.seed, device=device)
+    main(alpha=args.alpha, seed=args.seed)
