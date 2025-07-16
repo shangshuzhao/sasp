@@ -1,3 +1,4 @@
+
 import argparse
 import numpy as np
 import pandas as pd
@@ -76,27 +77,27 @@ def main(alpha, seed):
     # extended sasp index using medex imputed
     medex_proteins = medex_imputed.iloc[:,4:]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+#    medex_proteins = match_ukb_dist(medex_proteins)
     index_1 = gen_index(medex_proteins, tgae, device)
 
     # original sasp index using medex imputed
     indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
     medex_proteins = medex_imputed.iloc[:,[i + 4 for i in indexes]]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+#    medex_proteins = match_ukb_dist(medex_proteins)
     index_2 = gen_index(medex_proteins, tgae, device)
 
     # extended sasp index using medex raw
     medex_proteins = medex_missing.iloc[:,4:42]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+#    medex_proteins = match_ukb_dist(medex_proteins)
     index_3 = gen_index(medex_proteins, tgae, device)
 
     # original sasp index using medex raw
     indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
     medex_proteins = medex_missing.iloc[:,[i + 4 for i in indexes]]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+#    medex_proteins = match_ukb_dist(medex_proteins)
     index_4 = gen_index(medex_proteins, tgae, device)
 
     # Combine results
@@ -106,7 +107,7 @@ def main(alpha, seed):
     index_3 = pd.DataFrame({'sasp_index_e_missing': index_3})
     index_4 = pd.DataFrame({'sasp_index_o_missing': index_4})
     df_combined = pd.concat([id, index_1, index_2, index_3, index_4], axis=1)
-    df_combined.to_csv(f"sasp_medex__a{alpha}_s{seed}.csv", index=False)
+    df_combined.to_csv(f"sasp_medex_a{alpha}_s{seed}.csv", index=False)
 
 
 # --- CONFIGURATION ---

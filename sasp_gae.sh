@@ -30,9 +30,9 @@ SEEDS=(1 2 3 4 5)
 # Loop over all combinations
 for alpha in "${ALPHAS[@]}"; do
     for seed in "${SEEDS[@]}"; do
-        echo "Running seed=$1, alpha=$alpha"
-        python train_tgae.py --seed $seed --alpha $alpha
-        python encode_sasp_ukb.py --seed $seed --alpha $alpha
+        echo "Running seed=$seed, alpha=$alpha"
+#        python train_tgae.py --seed $seed --alpha $alpha
+#        python encode_sasp_ukb.py --seed $seed --alpha $alpha
         python encode_sasp_medex.py --seed $seed --alpha $alpha
     done
 done
