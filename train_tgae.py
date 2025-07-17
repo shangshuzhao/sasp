@@ -27,8 +27,8 @@ def prepare_data(ukb_sasp_train, ukb_sasp_val, device):
     ukb_sample_train = ukb_sasp_train.iloc[:,7:]
     ukb_sample_val = ukb_sasp_val.iloc[:,7:]
 
-    ukb_target_train = ukb_sasp_train.iloc[:,5] * 50
-    ukb_target_val = ukb_sasp_val.iloc[:,5] * 50
+    ukb_target_train = ukb_sasp_train.iloc[:,5]
+    ukb_target_val = ukb_sasp_val.iloc[:,5]
 
     # Embed variables names
     var_names = ukb_sample_train.columns.tolist()

@@ -68,7 +68,7 @@ def main(prefix, alpha, seed):
 
     # Load TGAE model and data
     tgae = TransformerAE().to(device)
-    model_path = f"gae_{prefix}_a{str(alpha)[2:]}_s{seed}.pth"
+    model_path = f"gae_a{str(alpha)[2:]}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 
     medex_imputed = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")

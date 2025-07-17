@@ -84,8 +84,8 @@ def main(seed, alpha, prefix):
     medex_train_sample = rename_medex_columns(medex_train_sample)
     medex_valid_sample = rename_medex_columns(medex_valid_sample)
 
-    medex_train_target = 100 - medex.iloc[:1200, 42]
-    medex_valid_target = 100 - medex.iloc[1200:, 42]
+    medex_train_target = 2 - medex.iloc[:1200, 42] / 50
+    medex_valid_target = 2 - medex.iloc[1200:, 42] / 50
 
     medex_train_loader, medex_valid_loader, proteins_label = prepare_data(medex_train_sample, medex_train_target, medex_valid_sample, medex_valid_target, device)
 
