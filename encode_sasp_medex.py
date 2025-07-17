@@ -63,12 +63,12 @@ def gen_index(raw_df, tgae, device):
 
     return sasp_index_list
 
-def main(alpha, seed):
+def main(prefix, alpha, seed):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load TGAE model and data
     tgae = TransformerAE().to(device)
-    model_path = f"gae_a{str(alpha)[2:]}_s{seed}.pth"
+    model_path = f"gae_{prefix}_a{str(alpha)[2:]}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 
     medex_imputed = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")
@@ -107,15 +107,16 @@ def main(alpha, seed):
     index_3 = pd.DataFrame({'sasp_index_e_missing': index_3})
     index_4 = pd.DataFrame({'sasp_index_o_missing': index_4})
     df_combined = pd.concat([id, index_1, index_2, index_3, index_4], axis=1)
-    df_combined.to_csv(f"sasp_medex_a{str(alpha)[2:]}_s{seed}.csv", index=False)
+    df_combined.to_csv(f"sasp_medex_{prefix}_a{str(alpha)[2:]}_s{seed}.csv", index=False)
 
 
 # --- CONFIGURATION ---
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--seed', type=int, required=True)
+    parser.add_argument('--prefix', type=str, required=True)
     parser.add_argument('--alpha', type=float, required=True)
+    parser.add_argument('--seed', type=int, required=True)
     args = parser.parse_args()
 
-    main(alpha=args.alpha, seed=args.seed)
+    main( prefix=args.prefix, alpha=args.alpha, seed=args.seed)

@@ -27,7 +27,7 @@ def prepare_data(ukb_sasp_train, ukb_sasp_val, device):
     ukb_sample_train = ukb_sasp_train.iloc[:,7:]
     ukb_sample_val = ukb_sasp_val.iloc[:,7:]
 
-    ukb_target_train = ukb_sasp_train.iloc[:,5]
+    ukb_target_train = ukb_sasp_train.iloc[:,5] * 50
     ukb_target_val = ukb_sasp_val.iloc[:,5] * 50
 
     # Embed variables names
@@ -79,7 +79,7 @@ def plot_losses(train_losses, test_losses, alpha, seed):
     plt.grid(True)
     plt.savefig(f"loss_a{str(alpha)[2:]}_s{seed}.png")
 
-def save_sasp_index(tgae, ukb_sasp_all, alpha, seed):
+def save_sasp_index(tgae, ukb_sasp_all, alpha, seed, device):
 
     ukb_sample_all = ukb_sasp_all.iloc[:,7:45]
     ukb_sample_all = ukb_sample_all.values.astype(np.float32)
