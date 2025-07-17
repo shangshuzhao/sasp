@@ -67,7 +67,7 @@ def main(alpha, seed):
 
     # Load TGAE model
     tgae = TransformerAE().to(device)
-    model_path = f"gae_a{alpha}_s{seed}.pth"
+    model_path = f"gae_a{str(alpha)[2:]}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 
     ukb_raw = pd.read_csv("ukb/ukb_sasp_2.csv")
@@ -86,7 +86,7 @@ def main(alpha, seed):
     index_1 = pd.DataFrame({'sasp_index_e': index_1})
     index_2 = pd.DataFrame({'sasp_index_o': index_2})
     df_combined = pd.concat([id, index_1, index_2], axis=1)
-    df_combined.to_csv(f"sasp_ukb_a{alpha}_s{seed}.csv", index=False)
+    df_combined.to_csv(f"sasp_ukb_a{str(alpha)[2:]}_s{seed}.csv", index=False)
 
 # --- CONFIGURATION ---
 if __name__ == "__main__":

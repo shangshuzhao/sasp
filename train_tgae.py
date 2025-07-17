@@ -28,7 +28,7 @@ def prepare_data(ukb_sasp_train, ukb_sasp_val, device):
     ukb_sample_val = ukb_sasp_val.iloc[:,7:]
 
     ukb_target_train = ukb_sasp_train.iloc[:,5]
-    ukb_target_val = ukb_sasp_val.iloc[:,5]
+    ukb_target_val = ukb_sasp_val.iloc[:,5] * 50
 
     # Embed variables names
     var_names = ukb_sample_train.columns.tolist()
@@ -77,7 +77,7 @@ def plot_losses(train_losses, test_losses, alpha, seed):
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f"loss_a{alpha}_s{seed}.png")
+    plt.savefig(f"loss_a{str(alpha)[2:]}_s{seed}.png")
 
 def save_sasp_index(tgae, ukb_sasp_all, alpha, seed):
 
@@ -95,10 +95,11 @@ def save_sasp_index(tgae, ukb_sasp_all, alpha, seed):
     ukb_eid = ukb_sasp_all.iloc[:,0]
     df_combined = pd.concat([ukb_eid, df], axis=1)
 
-    output_filename = f"index_a{alpha}_s{seed}.csv"
+    output_filename = f"index_a{str(alpha)[2:]}_s{seed}.csv"
     df_combined.to_csv(output_filename, index=False)
 
-def main(seed, alpha, device):
+def main(seed, alpha):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     set_seed(seed)
 
@@ -154,7 +155,7 @@ def main(seed, alpha, device):
         test_losses.append(running_loss / len(ukb_val_loader))
 
     # --- SAVE TRAINED MODEL ---
-    model_filename = f"gae_a{alpha}_s{seed}.pth"
+    model_filename = f"gae_a{str(alpha)[2:]}_s{seed}.pth"
     torch.save(tgae.state_dict(), model_filename)
 
     # --- PLOT LOSS ---
@@ -167,6 +168,4 @@ if __name__ == "__main__":
     parser.add_argument('--alpha', type=float, required=True)
     args = parser.parse_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
-    main(seed=args.seed, alpha=args.alpha, device=device)
+    main(seed=args.seed, alpha=args.alpha)
