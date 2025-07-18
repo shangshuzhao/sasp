@@ -2,8 +2,8 @@
 
 # --- SLURM Directives ---
 #SBATCH --job-name=sasp
-#SBATCH --output=output.out       # Standard output file (%j will be replaced by jobid)
-#SBATCH --error=error.err        # Standard error file
+#SBATCH --output=%j.out       # Standard output file (%j will be replaced by jobid)
+#SBATCH --error=%j.err        # Standard error file
 #SBATCH --time=08:00:00
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=shangshu.zhao@uconn.edu

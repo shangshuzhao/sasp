@@ -1,6 +1,6 @@
 import argparse
 import random
-
+import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,6 +13,7 @@ from torch.utils.data import TensorDataset
 from protein_to_label import name_to_embed
 from TransformerAutoEncoder import TransformerAE
 from rename_medex_protein import rename_medex_columns
+from match_dist import match_ukb_dist
 
 def set_seed(seed):
     random.seed(seed)                         # Python random
@@ -77,12 +78,14 @@ def main(seed, alpha, prefix):
     set_seed(seed)
 
     # --- IMPORT DATA ---
-    medex = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute_age.csv")
+    medex = pd.read_csv("df_medex/MEDEX_Expanded_SASP_ALL_impute_age.csv")
 
     medex_train_sample = medex.iloc[:1200,4:42]
     medex_valid_sample = medex.iloc[1200:,4:42]
     medex_train_sample = rename_medex_columns(medex_train_sample)
     medex_valid_sample = rename_medex_columns(medex_valid_sample)
+    medex_train_sample = match_ukb_dist(medex_train_sample)
+    medex_valid_sample = match_ukb_dist(medex_valid_sample)
 
     medex_train_target = 2 - medex.iloc[:1200, 42] / 50
     medex_valid_target = 2 - medex.iloc[1200:, 42] / 50
@@ -147,6 +150,12 @@ def main(seed, alpha, prefix):
     # --- PLOT LOSS ---
     p_filename = f"loss_{prefix}_a{str(alpha)[2:]}_s{seed}.png"
     plot_losses(train_losses, valid_losses, p_filename)
+    losses = {
+        "train losses": train_losses,
+        "valid losses": valid_losses
+    }
+    with open(f"loss_{prefix}_a{str(alpha)[2:]}_s{seed}.json", 'w') as f:
+        json.dump(losses, f)
 
 # --- CONFIGURATION ---
 if __name__ == "__main__":

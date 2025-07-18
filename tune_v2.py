@@ -1,6 +1,6 @@
 import argparse
 import random
-
+import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -77,7 +77,7 @@ def main(seed, alpha, prefix):
     set_seed(seed)
 
     # --- IMPORT DATA ---
-    medex = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute_age.csv")
+    medex = pd.read_csv("df_medex/MEDEX_Expanded_SASP_ALL_impute_age.csv")
 
     medex_train_sample = medex.iloc[:1200,4:42]
     medex_valid_sample = medex.iloc[1200:,4:42]
@@ -151,6 +151,12 @@ def main(seed, alpha, prefix):
     # --- PLOT LOSS ---
     p_filename = f"loss_{prefix}_a{str(alpha)[2:]}_s{seed}.png"
     plot_losses(train_losses, valid_losses, p_filename)
+    losses = {
+        "train losses": train_losses,
+        "valid losses": valid_losses
+    }
+    with open(f"loss_{prefix}_a{str(alpha)[2:]}_s{seed}.json", 'w') as f:
+        json.dump(losses, f)
 
 # --- CONFIGURATION ---
 if __name__ == "__main__":

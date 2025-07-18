@@ -2,8 +2,8 @@
 
 # --- SLURM Directives ---
 #SBATCH --job-name=sasp
-#SBATCH --output=out%j.out       # Standard output file (%j will be replaced by jobid)
-#SBATCH --error=err%j.err        # Standard error file
+#SBATCH --output=%j.out       # Standard output file (%j will be replaced by jobid)
+#SBATCH --error=%j.err        # Standard error file
 #SBATCH --time=08:00:00
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=shangshu.zhao@uconn.edu
@@ -30,8 +30,8 @@ SEEDS=(1 2 3 4 5)
 # Loop over all combinations
 for seed in "${SEEDS[@]}"; do
     echo "Running seed=$seed, alpha=$1"
-#    python train_tgae.py --seed $seed --alpha $1
-    python encode_sasp_ukb.py --prefix "v1" --seed $seed --alpha $1
+    python train_tgae.py --seed $seed --alpha $1
+    python encode_sasp_ukb.py --prefix "v0" --seed $seed --alpha $1
     python encode_sasp_medex.py --prefix "v0" --seed $seed --alpha $1
 done
 

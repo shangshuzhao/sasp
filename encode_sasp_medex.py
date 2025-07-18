@@ -1,6 +1,5 @@
 
 import argparse
-import numpy as np
 import pandas as pd
 
 import torch
@@ -68,11 +67,11 @@ def main(prefix, alpha, seed):
 
     # Load TGAE model and data
     tgae = TransformerAE().to(device)
-    model_path = f"gae_{prefix}_a{str(alpha)[2:]}_s{seed}.pth"
+    model_path = f"gae_a{str(alpha)[2:]}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 
-    medex_imputed = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_impute.csv")
-    medex_missing = pd.read_csv("medex/MEDEX_Expanded_SASP_ALL_missing.csv")
+    medex_imputed = pd.read_csv("df_medex/MEDEX_Expanded_SASP_ALL_impute.csv")
+    medex_missing = pd.read_csv("df_medex/MEDEX_Expanded_SASP_ALL_missing.csv")
 
     # extended sasp index using medex imputed
     medex_proteins = medex_imputed.iloc[:,4:]

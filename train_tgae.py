@@ -105,8 +105,8 @@ def main(seed, alpha):
 
     # --- IMPORT DATA ---
 
-    ukb_sasp_train = pd.read_csv("ukb/ukb_sasp_train.csv")
-    ukb_sasp_val = pd.read_csv("ukb/ukb_sasp_val.csv")
+    ukb_sasp_train = pd.read_csv("df_ukb/ukb_sasp_train.csv")
+    ukb_sasp_val = pd.read_csv("df_ukb/ukb_sasp_val.csv")
     ukb_train_loader, ukb_val_loader, proteins_label = prepare_data(ukb_sasp_train, ukb_sasp_val, device)
 
     # --- NETWORK INSTANTIATE ---
