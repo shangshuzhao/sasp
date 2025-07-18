@@ -63,7 +63,7 @@ def main(prefix, alpha, seed):
 
     # Load TGAE model
     tgae = TransformerAE().to(device)
-    model_path = f"gae_a{str(alpha)[2:]}_s{seed}.pth"
+    model_path = f"gae_{prefix}_a{str(alpha)[2:]}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 
     ukb_raw = pd.read_csv("df_ukb/ukb_sasp_2.csv")

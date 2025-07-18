@@ -29,7 +29,7 @@ prefix="v1"
 
 for seed in "${SEEDS[@]}"; do
     echo "Running seed=$seed, alpha=$1"
-    python tune_v1.py --prefix $prefix --alpha $1 --seed $seed
+#    python tune_v1.py --prefix $prefix --alpha $1 --seed $seed
     python encode_sasp_ukb.py --prefix $prefix --alpha $1 --seed $seed
     python encode_sasp_medex.py --prefix $prefix --alpha $1 --seed $seed
 done
