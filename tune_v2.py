@@ -120,7 +120,6 @@ def main(seed, alpha, prefix):
     num_epochs = 30
 
     for i in range(num_epochs):
-        print(f"Epoch: {i}", flush=True)
 
         tgae.train()
         running_loss = 0.0
@@ -129,16 +128,9 @@ def main(seed, alpha, prefix):
             latents, recon_x = tgae(samples, proteins_label)
  
             loss = criterion(recon_x, samples, latents, guides, alpha=alpha)
-            if torch.isnan(loss):
-                print("NaN loss detected!")
-                print("Samples:", samples, flush=True)
-                print("Recon:", recon_x, flush=True)
-                print("Latents:", latents, flush=True)
-                print("Guides:", guides, flush=True)
 
             loss.backward()
             running_loss += loss.item()
-            print(f"Train Loss: {loss.item()}", flush=True)
 
             optimizer.step()
             optimizer.zero_grad()
@@ -154,7 +146,6 @@ def main(seed, alpha, prefix):
 
                 loss = criterion(recon_x, samples, latents, guides, alpha=alpha)
                 running_loss += loss.item()
-                print(f"Valid Loss: {loss.item()}", flush=True)
 
         valid_losses.append(running_loss / len(medex_valid_loader))
 
