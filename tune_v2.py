@@ -10,9 +10,10 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 
-from protein_to_label import name_to_embed
 from TransformerAutoEncoder import TransformerAE
+from protein_to_label import name_to_embed
 from rename_medex_protein import rename_medex_columns
+from match_dist import match_ukb_dist
 
 def set_seed(seed):
     random.seed(seed)                         # Python random
@@ -83,6 +84,8 @@ def main(seed, alpha, prefix):
     medex_valid_sample = medex.iloc[1200:,4:42]
     medex_train_sample = rename_medex_columns(medex_train_sample)
     medex_valid_sample = rename_medex_columns(medex_valid_sample)
+    medex_train_sample = match_ukb_dist(medex_train_sample)
+    medex_valid_sample = match_ukb_dist(medex_valid_sample)
 
     medex_train_target = 2 - medex.iloc[:1200, 42] / 50
     medex_valid_target = 2 - medex.iloc[1200:, 42] / 50
@@ -116,17 +119,26 @@ def main(seed, alpha, prefix):
 
     num_epochs = 30
 
-    for _ in range(num_epochs):
+    for i in range(num_epochs):
+        print(f"Epoch: {i}", flush=True)
 
         tgae.train()
         running_loss = 0.0
 
         for samples, guides in medex_train_loader:
             latents, recon_x = tgae(samples, proteins_label)
-
+ 
             loss = criterion(recon_x, samples, latents, guides, alpha=alpha)
+            if torch.isnan(loss):
+                print("NaN loss detected!")
+                print("Samples:", samples, flush=True)
+                print("Recon:", recon_x, flush=True)
+                print("Latents:", latents, flush=True)
+                print("Guides:", guides, flush=True)
+
             loss.backward()
             running_loss += loss.item()
+            print(f"Train Loss: {loss.item()}", flush=True)
 
             optimizer.step()
             optimizer.zero_grad()
@@ -140,7 +152,9 @@ def main(seed, alpha, prefix):
             for samples, guides in medex_valid_loader:
                 latents, recon_x = tgae(samples, proteins_label)
 
-                running_loss += criterion(recon_x, samples, latents, guides, alpha=alpha).item()
+                loss = criterion(recon_x, samples, latents, guides, alpha=alpha)
+                running_loss += loss.item()
+                print(f"Valid Loss: {loss.item()}", flush=True)
 
         valid_losses.append(running_loss / len(medex_valid_loader))
 
