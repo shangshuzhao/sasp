@@ -1,12 +1,9 @@
-
 import argparse
 import pandas as pd
-
 import torch
 
+import utils
 from TransformerAutoEncoder import TransformerAE
-from protein_to_label import name_to_embed
-from match_dist import match_ukb_dist
 from rename_medex_protein import rename_medex_columns
 
 def gen_single_index(row, tgae, device):
@@ -22,7 +19,7 @@ def gen_single_index(row, tgae, device):
     protein_values = valid_proteins.values.tolist()
 
     # Convert protein names to indices
-    protein_indices = name_to_embed(protein_names)
+    protein_indices = utils.embed_ukb_protein(protein_names)
 
     # Convert to torch tensors
     protein_idx_tensor = torch.tensor(protein_indices, dtype=torch.long).unsqueeze(0).to(device)   # Shape: (1, P)
@@ -62,13 +59,19 @@ def gen_index(raw_df, tgae, device):
 
     return sasp_index_list
 
-def main(prefix, alpha, seed):
+def main(args):
+
+    # --- HYPERPARAMETERS ---
+    prefix = args.prefix
+    bn = args.bn
+    alpha = args.alpha
+    seed = args.seed
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load TGAE model and data
-    tgae = TransformerAE().to(device)
-    model_path = f"gae_{prefix}_a{str(alpha)[2:]}_s{seed}.pth"
-    tgae.load_state_dict(torch.load(model_path))
+    tgae = TransformerAE(latent_dim=bn).to(device)
+    m_path = f"gae_{prefix}_b{bn}_a{str(alpha)[2:]}_s{seed}.pth"
+    tgae.load_state_dict(torch.load(m_path))
 
     medex_imputed = pd.read_csv("df_medex/MEDEX_Expanded_SASP_ALL_impute.csv")
     medex_missing = pd.read_csv("df_medex/MEDEX_Expanded_SASP_ALL_missing.csv")
@@ -76,37 +79,39 @@ def main(prefix, alpha, seed):
     # extended sasp index using medex imputed
     medex_proteins = medex_imputed.iloc[:,4:]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+    medex_proteins = utils.match_ukb_dist(medex_proteins)
     index_1 = gen_index(medex_proteins, tgae, device)
 
     # original sasp index using medex imputed
     indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
     medex_proteins = medex_imputed.iloc[:,[i + 4 for i in indexes]]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+    medex_proteins = utils.match_ukb_dist(medex_proteins)
     index_2 = gen_index(medex_proteins, tgae, device)
 
     # extended sasp index using medex raw
     medex_proteins = medex_missing.iloc[:,4:42]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+    medex_proteins = utils.match_ukb_dist(medex_proteins)
     index_3 = gen_index(medex_proteins, tgae, device)
 
     # original sasp index using medex raw
     indexes = [0, 1, 3, 5, 7, 9, 10, 11, 14, 19, 22, 23, 24, 25, 26, 27, 29, 31, 32, 34, 35, 37]
     medex_proteins = medex_missing.iloc[:,[i + 4 for i in indexes]]
     medex_proteins = rename_medex_columns(medex_proteins)
-    medex_proteins = match_ukb_dist(medex_proteins)
+    medex_proteins = utils.match_ukb_dist(medex_proteins)
     index_4 = gen_index(medex_proteins, tgae, device)
 
     # Combine results
     id = medex_imputed.iloc[:,0:4]
     index_1 = pd.DataFrame({'sasp_index_e_imputed': index_1})
-    index_2 = pd.DataFrame({'sasp_index_o_imputed': index_2})
+    index_2 = pd.DataFrame({'sasp_index_r_imputed': index_2})
     index_3 = pd.DataFrame({'sasp_index_e_missing': index_3})
-    index_4 = pd.DataFrame({'sasp_index_o_missing': index_4})
+    index_4 = pd.DataFrame({'sasp_index_r_missing': index_4})
     df_combined = pd.concat([id, index_1, index_2, index_3, index_4], axis=1)
-    df_combined.to_csv(f"sasp_medex_{prefix}_a{str(alpha)[2:]}_s{seed}.csv", index=False)
+
+    i_path = f"sasp_medex_{prefix}_b{bn}_a{str(alpha)[2:]}_s{seed}.csv"
+    df_combined.to_csv(i_path, index=False)
 
 
 # --- CONFIGURATION ---
@@ -114,8 +119,9 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--prefix', type=str, required=True)
+    parser.add_argument('--bn', type=int, required=True)
     parser.add_argument('--alpha', type=float, required=True)
     parser.add_argument('--seed', type=int, required=True)
     args = parser.parse_args()
 
-    main( prefix=args.prefix, alpha=args.alpha, seed=args.seed)
+    main(args)

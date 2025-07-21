@@ -2,8 +2,8 @@
 
 # --- SLURM Directives ---
 #SBATCH --job-name=sasp
-#SBATCH --output=%j.out       # Standard output file (%j will be replaced by jobid)
-#SBATCH --error=%j.err        # Standard error file
+#SBATCH --output=out%j.out       # Standard output file (%j will be replaced by jobid)
+#SBATCH --error=err%j.err        # Standard error file
 #SBATCH --time=08:00:00
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=shangshu.zhao@uconn.edu
@@ -24,15 +24,17 @@ module purge
 source /gpfs/homefs1/shz19039/miniconda3/etc/profile.d/conda.sh
 conda activate climate
 
-ALPHAS=(0.005 0.006 0.007 0.008 0.009 0.01)
+ALPHAS=(0.005 0.006 0.007 0.008 0.009)
 SEEDS=(1 2 3 4 5)
+prefix="v0"
 
-# Loop over all combinations
-for seed in "${SEEDS[@]}"; do
-    echo "Running seed=$seed, alpha=$1"
-#    python train_tgae.py --seed $seed --alpha $1
-    python encode_sasp_ukb.py --prefix "v0" --seed $seed --alpha $1
-    python encode_sasp_medex.py --prefix "v0" --seed $seed --alpha $1
+for alpha in "${ALPHAS[@]}"; do
+    for seed in "${SEEDS[@]}"; do
+        echo "Running bn=$1 alpha=$alpha seed=$seed"
+#        python train_tgae.py  --prefix $prefix --bn $1 --alpha $alpha --seed $seed
+        python encode_sasp_ukb.py --prefix $prefix --bn $1 --alpha $alpha --seed $seed
+        python encode_sasp_medex.py --prefix $prefix --bn $1 --alpha $alpha --seed $seed
+    done
 done
 
 conda deactivate

@@ -1,0 +1,197 @@
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 127, in <module>
+    main(args)
+  File "/home/shz19039/sasp/encode_sasp_medex.py", line 74, in main
+    tgae.load_state_dict(torch.load(m_path))
+  File "/home/shz19039/miniconda3/envs/climate/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2593, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for TransformerAE:
+	size mismatch for latent_proj.weight: copying a param with shape torch.Size([6, 128]) from checkpoint, the shape in current model is torch.Size([8, 128]).
+	size mismatch for latent_proj.bias: copying a param with shape torch.Size([6]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for regressor.weight: copying a param with shape torch.Size([1, 6]) from checkpoint, the shape in current model is torch.Size([1, 8]).
+	size mismatch for expand_proj.weight: copying a param with shape torch.Size([128, 6]) from checkpoint, the shape in current model is torch.Size([128, 8]).
+Traceback (most recent call last):
+  File "/home/shz19039/sasp/encode_sasp_ukb.py", line 105, in <module>
+    main(args)
+TypeError: main() missing 2 required positional arguments: 'alpha' and 'seed'
+slurmstepd: error: *** JOB 18500240 ON gpu43 CANCELLED AT 2025-07-20T22:16:13 DUE TO TIME LIMIT ***
