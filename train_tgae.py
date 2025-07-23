@@ -22,10 +22,10 @@ def main(args):
     ukb_sasp_valid = pd.read_csv("df_ukb/ukb_sasp_val.csv")
 
     ukb_train_sample = ukb_sasp_train.iloc[:,7:]
-    ukb_train_target = ukb_sasp_train.iloc[:,5]
+    ukb_train_target = ukb_sasp_train.iloc[:,6]
 
     ukb_valid_sample = ukb_sasp_valid.iloc[:,7:]
-    ukb_valid_target = ukb_sasp_valid.iloc[:,5]
+    ukb_valid_target = ukb_sasp_valid.iloc[:,6]
 
     ukb_train_loader, ukb_valid_loader, proteins_label = utils.prepare_data(
         ukb_train_sample, ukb_train_target, ukb_valid_sample, ukb_valid_target, device)
