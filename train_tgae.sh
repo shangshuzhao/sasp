@@ -4,7 +4,7 @@
 #SBATCH --job-name=sasp
 #SBATCH --output=%j.out       # Standard output file (%j will be replaced by jobid)
 #SBATCH --error=%j.err        # Standard error file
-#SBATCH --time=08:00:00
+#SBATCH --time=12:00:00
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=shangshu.zhao@uconn.edu
 
@@ -24,7 +24,7 @@ module purge
 source /gpfs/homefs1/shz19039/miniconda3/etc/profile.d/conda.sh
 conda activate climate
 
-ALPHAS=(0.02 0.05 0.07 0.1 0.3 0.5)
+ALPHAS=(0.03 0.04 0.06 0.08 0.09)
 SEEDS=(1 2 3 4 5)
 prefix="age"
 
