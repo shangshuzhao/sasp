@@ -24,14 +24,18 @@ module purge
 source /gpfs/homefs1/shz19039/miniconda3/etc/profile.d/conda.sh
 conda activate climate
 
+ALPHAS=(0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09)
 SEEDS=(1 2 3 4 5)
-prefix="v1"
+prefix="tune1"
+bn=6
 
 for seed in "${SEEDS[@]}"; do
-    echo "Running seed=$seed, alpha=$1"
-#    python tune_v1.py --prefix $prefix --alpha $1 --seed $seed
-    python encode_sasp_ukb.py --prefix $prefix --alpha $1 --seed $seed
-    python encode_sasp_medex.py --prefix $prefix --alpha $1 --seed $seed
+    for alpha in "${ALPHAS[@]}"; do
+        echo "Running seed=$seed, alpha=$alpha"
+        python tune_v1.py --prefix $prefix --bn $bn --alpha $alpha --seed $seed
+        python encode_sasp_ukb.py --prefix $prefix --bn $bn --alpha $alpha --seed $seed
+        python encode_sasp_medex.py --prefix $prefix --bn $bn --alpha $alpha --seed $seed
+    done
 done
 
 conda deactivate

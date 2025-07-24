@@ -200,11 +200,11 @@ def plot_losses(train_losses, valid_losses, path):
     if len(train_losses) < 2:
         raise ValueError("Need at least 2 epochs of losses to plot.")
     
-    epochs = range(len(train_losses))
+    epochs = range(len(train_losses)-1)
 
     plt.figure(figsize=(10, 6))
-    plt.plot(epochs, train_losses, marker='o', label='Training Error')
-    plt.plot(epochs, valid_losses, marker='o', label='Testing Error')
+    plt.plot(epochs, train_losses[1:], marker='o', label='Training Error')
+    plt.plot(epochs, valid_losses[1:], marker='o', label='Testing Error')
 
     plt.title('Training and Testing Losses Trend')
     plt.xlabel('Epoch')
