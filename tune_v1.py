@@ -35,7 +35,7 @@ def main(args):
 
     # --- NETWORK INSTANTIATE ---
 
-    tgae = TransformerAE().to(device)
+    tgae = TransformerAE(latent_dim=bn).to(device)
     model_path = f"gae_age_b{bn}_a{str(alpha)[2:]}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 

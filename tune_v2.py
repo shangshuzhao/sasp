@@ -32,10 +32,10 @@ def main(args):
 
     medex_train_loader, medex_valid_loader, proteins_label = utils.prepare_data(
         medex_train_sample, medex_train_target, medex_valid_sample, medex_valid_target, device)
-    
+
     # --- NETWORK INSTANTIATE ---
 
-    tgae = TransformerAE().to(device)
+    tgae = TransformerAE(latent_dim=bn).to(device)
     model_path = f"gae_age_b{bn}_a{str(alpha)[2:]}_s{seed}.pth"
     tgae.load_state_dict(torch.load(model_path))
 
@@ -67,7 +67,7 @@ def main(args):
 
         for samples, guides in medex_train_loader:
             latents, recon_x = tgae(samples, proteins_label)
- 
+
             loss = utils.criterion(recon_x, samples, latents, guides, alpha=alpha)
 
             loss.backward()
