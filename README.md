@@ -1,10 +1,10 @@
-# SASP Index (TGAE)
+# SASP Score (TGAE)
 
-Transformer-based Graph-ish Autoencoder (TGAE) to compute a **Senescence-Associated Secretory Phenotype (SASP) index** from a panel of 38 inflammatory/protein markers. This repository includes:
+Transformer-based Graph-ish Autoencoder (TGAE) to compute a **Senescence-Associated Secretory Phenotype (SASP) score** from a panel of 38 inflammatory/protein markers. This repository includes:
 
-- A PyTorch model (`TGAE`) for encoding protein profiles and predicting a scalar SASP index
+- A PyTorch model (`TGAE`) for encoding protein profiles and predicting a scalar SASP score
 - Utilities for data cleaning and UK Biobank distribution matching
-- Helpers to compute the SASP index for new samples
+- Helpers to compute the SASP score for new samples
 - Simple fine-tuning routines and an example notebook
 
 ---
@@ -16,7 +16,7 @@ Transformer-based Graph-ish Autoencoder (TGAE) to compute a **Senescence-Associa
 ├── example.ipynb           # End-to-end demo: loading data, fine-tuning, and evaluating
 ├── tgae.py                 # Model: VariableEncoder/Decoder + TGAE
 ├── proteins_info.py        # Protein list, UKB distribution stats, data cleaning helpers
-├── get_index.py            # Batch & single-row SASP index computation helpers
+├── get_index.py            # Batch & single-row SASP score computation helpers
 ├── fine_tune.py            # Train/valid split and fine-tuning loop utilities
 ├── utils.py                # Training utilities, losses, embedding helpers, reproducibility
 └── tgae_pre_trained.pth    # Pre-trained TGAE checkpoint
@@ -45,9 +45,9 @@ ANG, CCL13, CCL2, CCL20, CCL3, CCL4, CHI3L1, CSF2, CXCL1, CXCL10, CXCL8, CXCL9, 
 
 ---
 
-## Quickstart: Compute SASP Index for New Data
+## Quickstart: Compute SASP Score for New Data
 
-Below is a minimal example showing how to load the pre-trained model and compute the SASP index for each row of a `pandas.DataFrame` that has **exactly** the 38 proteins as columns (order does not matter). Any extra columns should be dropped beforehand.
+Below is a minimal example showing how to load the pre-trained model and compute the SASP score for each row of a `pandas.DataFrame` that has **exactly** the 38 proteins as columns (order does not matter). Any extra columns should be dropped beforehand.
 
 ```python
 import torch
@@ -67,7 +67,7 @@ tgae.eval()
 # 3) Load your data (must contain the 38 proteins as columns)
 df = pd.read_csv("your_protein_table.csv")
 
-# 4) Compute SASP index per row
+# 4) Compute SASP score per row
 sasp = gen_index(df, tgae, device)  # -> list[float] aligned to df rows
 print(sasp[:5])
 ```
@@ -153,9 +153,9 @@ tgae, train_losses, valid_losses = train(
 - **`forward(x, var_label)`** → `(latent, recon)`  
   - `x`: `(batch, P)` protein values  
   - `var_label`: `(1, P)` integer embedding of variable names  
-  - Returns a **latent scalar prediction** (the SASP index) and a **reconstruction** of inputs.
+  - Returns a **latent scalar prediction** (the SASP score) and a **reconstruction** of inputs.
 - **`predict(x, var_label)`** → `latent`  
-  - Convenience method to get only the SASP index.
+  - Convenience method to get only the SASP score.
 
 ### `proteins_info.py`
 - `protein_list`: canonical ordered tuple of the 38 proteins.  
@@ -163,8 +163,8 @@ tgae, train_losses, valid_losses = train(
 - `clean_data(df, tunning=False, proteins_list=protein_list)`: validates presence of required proteins (case-insensitive); optionally finds the `age` column when `tunning=True`.
 
 ### `get_index.py`
-- `gen_single_index(row, tgae, device)`: compute SASP index for a single row.  
-- `gen_index(df, tgae, device)`: compute SASP index for all rows (returns `list[float]`).
+- `gen_single_index(row, tgae, device)`: compute SASP score for a single row.  
+- `gen_index(df, tgae, device)`: compute SASP score for all rows (returns `list[float]`).
 
 ### `utils.py`
 - Embedding helpers to map protein names to integer IDs for the transformer.
@@ -191,7 +191,7 @@ Open `example.ipynb` for a complete walkthrough:
 - Set hyperparameters
 - Load & clean data
 - Fine-tune the model
-- Compute and inspect SASP index
+- Compute and inspect SASP score
 
 ---
 
