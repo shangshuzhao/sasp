@@ -7,8 +7,6 @@ Transformer-based Graph-ish Autoencoder (TGAE) to compute a **Senescence-Associa
 - Helpers to compute the SASP index for new samples
 - Simple fine-tuning routines and an example notebook
 
-> **TL;DR**: Give the model a DataFrame with the 38 required proteins as columns, and it returns a SASP index per row.
-
 ---
 
 ## Repo Structure
@@ -31,21 +29,15 @@ Transformer-based Graph-ish Autoencoder (TGAE) to compute a **Senescence-Associa
 Python 3.9+ recommended.
 
 ```bash
-# (optional) create a virtual environment
-python -m venv .venv
-source .venv/bin/activate  # on Windows: .venv\Scripts\activate
-
 # install dependencies
 pip install torch numpy pandas matplotlib
 ```
-
-> If you plan to use GPU acceleration, install the CUDA-enabled build of PyTorch following the official instructions for your platform.
 
 ---
 
 ## The 38 Required Proteins
 
-Your input must contain **all** of the following columns (case-insensitive accepted by the cleaner, but normalized to UPPERCASE internally):
+Your input must contain **exact all** of the following columns (case-insensitive accepted by the cleaner, but normalized to UPPERCASE internally):
 
 ```
 ANG, CCL13, CCL2, CCL20, CCL3, CCL4, CHI3L1, CSF2, CXCL1, CXCL10, CXCL8, CXCL9, FGA, FGF2, FSTL3, GDF15, HGF, ICAM1, IGFBP2, IGFBP6, IL1B, IL4, IL5, IL6, IL6ST, LEP, MIF, MMP12, PGF, PLAUR, SERPINE1, TF, TIMP1, TNFRSF11B, TNFRSF1A, TNFRSF1B, TNFSF10, VEGFA
