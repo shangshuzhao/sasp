@@ -7,7 +7,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 
-def embed_ukb_protein(name_list: list) -> list:
+def embed_protein(name_list: list) -> list:
     ''' Convert protein names to embedding indices '''
     # Predefined list of 38 expected proteins
     name_dict = {
@@ -53,107 +53,50 @@ def embed_ukb_protein(name_list: list) -> list:
     name_embed = [name_dict[name] for name in name_list]
     return name_embed
 
-def match_ukb_dist(df):
-    ''' Match the distribution of input dataframe to UK Biobank SASP protein distribution '''
-    # UK Biobank SASP protein means and standard deviations
-    ukb_means = {
-        'ANG': 0.008412209,
-        'CCL13': 0.022755328,
-        'CCL2': 0.023904332,
-        'CCL20': 0.151260181,
-        'CCL3': 0.064064144,
-        'CCL4': 0.065627897,
-        'CHI3L1': 0.133817108,
-        'CSF2': 0.009861640,
-        'CXCL1': 0.110607086,
-        'CXCL10': 0.082652478,
-        'CXCL8': 0.042198496,
-        'CXCL9': 0.097004956,
-        'FGA': 0.012391110,
-        'FGF2': 0.078542032,
-        'FSTL3': 0.031882412,
-        'GDF15': 0.073444923,
-        'HGF': 0.032068841,
-        'ICAM1': 0.012879968,
-        'IGFBP2': -0.050848724,
-        'IGFBP6': 0.023432412,
-        'IL1B': 0.073486292,
-        'IL4': -0.141638803,
-        'IL5': 0.268410990,
-        'IL6': 0.124677371,
-        'IL6ST': 0.001299400,
-        'LEP': -0.082768320,
-        'MIF': -0.022219210,
-        'MMP12': 0.043234173,
-        'PGF': 0.020601765,
-        'PLAUR': 0.020406817,
-        'SERPINE1': -0.041613098,
-        'TF': -0.002692966,
-        'TIMP1': 0.022978616,
-        'TNFRSF11B': 0.014422148,
-        'TNFRSF1A': 0.029982814,
-        'TNFRSF1B': 0.034870779,
-        'TNFSF10': -0.006918623,
-        'VEGFA': 0.088493049
+def embed_to_ukb_protein(name_list: list) -> list:
+    ''' Convert embedding indices to protein names'''
+    embed_to_name = {
+        0: 'ANG',
+        1: 'CCL13',
+        2: 'CCL2',
+        3: 'CCL20',
+        4: 'CCL3',
+        5: 'CCL4',
+        6: 'CHI3L1',
+        7: 'CSF2',
+        8: 'CXCL1',
+        9: 'CXCL10',
+        10: 'CXCL8',
+        11: 'CXCL9',
+        12: 'FGA',
+        13: 'FGF2',
+        14: 'FSTL3',
+        15: 'GDF15',
+        16: 'HGF',
+        17: 'ICAM1',
+        18: 'IGFBP2',
+        19: 'IGFBP6',
+        20: 'IL1B',
+        21: 'IL4',
+        22: 'IL5',
+        23: 'IL6',
+        24: 'IL6ST',
+        25: 'LEP',
+        26: 'MIF',
+        27: 'MMP12',
+        28: 'PGF',
+        29: 'PLAUR',
+        30: 'SERPINE1',
+        31: 'TF',
+        32: 'TIMP1',
+        33: 'TNFRSF11B',
+        34: 'TNFRSF1A',
+        35: 'TNFRSF1B',
+        36: 'TNFSF10',
+        37: 'VEGFA'
     }
-
-    ukb_sds = {
-        'ANG': 0.3955384,
-        'CCL13': 0.7855913,
-        'CCL2': 0.5965727,
-        'CCL20': 1.0096516,
-        'CCL3': 0.7045312,
-        'CCL4': 0.7433986,
-        'CHI3L1': 0.9136581,
-        'CSF2': 0.3452719,
-        'CXCL1': 1.0677707,
-        'CXCL10': 0.7815331,
-        'CXCL8': 0.7725987,
-        'CXCL9': 0.7935531,
-        'FGA': 0.3167290,
-        'FGF2': 0.7595377,
-        'FSTL3': 0.4021560,
-        'GDF15': 0.5895939,
-        'HGF': 0.4402710,
-        'ICAM1': 0.3362013,
-        'IGFBP2': 0.8046838,
-        'IGFBP6': 0.3838551,
-        'IL1B': 0.6282647,
-        'IL4': 0.9842809,
-        'IL5': 1.5453851,
-        'IL6': 0.8839393,
-        'IL6ST': 0.1975127,
-        'LEP': 1.2912836,
-        'MIF': 0.7687430,
-        'MMP12': 0.6566276,
-        'PGF': 0.3272117,
-        'PLAUR': 0.3394527,
-        'SERPINE1': 0.7684842,
-        'TF': 0.2136098,
-        'TIMP1': 0.3305618,
-        'TNFRSF11B': 0.3596158,
-        'TNFRSF1A': 0.3629309,
-        'TNFRSF1B': 0.4259883,
-        'TNFSF10': 0.2934764,
-        'VEGFA': 0.6615517
-    }
-
-    df_transformed = df.copy()
-
-    for col in df.columns:
-
-        if not col in ukb_means:
-            raise ValueError(f"Protein {col} not included in the UK Biobank")
-
-        col_mean = df[col].mean()
-        col_std = df[col].std()
-        target_mean = ukb_means[col]
-        target_std = ukb_sds[col]
-
-        df_transformed[col] = (df[col] - col_mean) / col_std
-        df_transformed[col] = df_transformed[col] * target_std + target_mean
-
-    return df_transformed
+    name_embed = [embed_to_name[name] for name in name_list]
+    return name_embed
 
 def set_seed(seed):
     ''' Set random seed for reproducibility '''
@@ -167,7 +110,7 @@ def prepare_data(train_sample, train_target, valid_sample, valid_target, device)
     ''' Prepare dataloader and protein name embeddings '''
     # Create a copy of protein name embeddings
     var_names = train_sample.columns.tolist()
-    var_label = embed_ukb_protein(var_names)
+    var_label = embed_protein(var_names)
     var_label = torch.tensor(var_label).to(device)
 
     # Convert to NumPy arrays
@@ -214,7 +157,7 @@ def plot_losses(train_losses, valid_losses, path):
     plt.savefig(path)
     plt.close()
 
-def criterion(recon_x, x, latent, tl, alpha=0.5):
+def criterion(recon_x, x, latent, tl, alpha=0.06):
     ''' Combined loss function: alpha * MSE + (1-alpha) * GUD '''
     MSE = nn.functional.mse_loss(recon_x, x, reduction='sum')
     GUD = nn.functional.mse_loss(latent, tl, reduction='sum')
